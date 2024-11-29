@@ -1,0 +1,49 @@
+id: org.freedesktop.Sdk.Extension.erlang
+branch: '24.08'
+runtime: org.freedesktop.Sdk
+build-extension: true
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+  - org.freedesktop.Sdk.Extension.openjdk21
+runtime-version: '24.08'
+separate-locales: false
+appstream-compose: false
+build-options:
+  prefix: /usr/lib/sdk/erlang
+  prepend-ld-library-path: /usr/lib/sdk/erlang/lib:/usr/lib/sdk/rust-stable/lib:/usr/lib/sdk/openjdk21/lib
+  prepend-path: /usr/lib/sdk/erlang/bin:/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/openjdk21/bin
+  build-args:
+    - --share=network
+modules:
+  - name: erlang
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://github.com/erlang/otp/releases/download/OTP-27.1.2/otp_src_27.1.2.tar.gz
+        sha256: 1772e9fa07b2b020ed5911d6ce78b251dfb6ed8509ed7de9d372e96b87251d14
+  - name: elixir
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/elixir-lang/elixir.git
+        tag: v1.17.3
+    build-commands:
+      - PREFIX=/usr/lib/sdk/erlang make clean compile install
+  - name: gleam
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/gleam-lang/gleam.git
+        tag: v1.6.2
+    build-commands:
+      - cd compiler-cli && cargo build --release &&  mv ../target/release/gleam /usr/lib/sdk/erlang/bin
+  - name: scripts
+    sources:
+      - type: script
+        commands:
+          - export PATH=$PATH:/usr/lib/sdk/erlang/bin:/usr/lib/sdk/elixir/bin
+        dest-filename: enable.sh
+    buildsystem: simple
+    build-commands:
+      - cp enable.sh /usr/lib/sdk/erlang

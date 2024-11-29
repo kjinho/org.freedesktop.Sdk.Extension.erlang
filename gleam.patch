@@ -1,0 +1,12 @@
+diff -r -u a/Makefile b/Makefile
+--- a/Makefile	2024-05-30 09:55:41.554803077 -0400
++++ b/Makefile	2024-05-30 09:56:00.838727059 -0400
+@@ -12,7 +12,7 @@
+ 
+ .PHONY: install
+ install: ## Build the Gleam compiler and place it on PATH
+-	cd compiler-cli && cargo install --path . --force --locked
++	cd compiler-cli && cargo install --path /usr/lib/sdk/erlang --force --locked
+ 
+ .PHONY: test
+ test: ## Run the compiler unit tests

@@ -1,0 +1,6 @@
+/.flatpak-builder/
+/a/
+/b/
+/build-dir/
+/gleam
+otp_src*.tar.gz
